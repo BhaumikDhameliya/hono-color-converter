@@ -1,0 +1,3 @@
+name = "hono-color-converter"
+main = "src/index.ts"
+compatibility_date = "2022-09-13"

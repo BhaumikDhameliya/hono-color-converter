@@ -1,0 +1,32 @@
+import { Hono } from "hono";
+import { keyword } from "color-convert";
+import { KEYWORD } from "color-convert/conversions";
+const app = new Hono();
+
+app.get("/", (ctx) => {
+  return ctx.text(
+    "This is a simple color converter. Use the /colorformat/colorname structure."
+  );
+});
+
+app.get("/:colorformat/:colorname", (ctx) => {
+  const colorname: KEYWORD = ctx.req.param("colorname") as KEYWORD;
+  const colorformat: string = ctx.req.param("colorformat");
+  try {
+    if (colorformat == "hex") {
+      return ctx.text("#" + keyword.hex(colorname));
+    }
+    if (colorformat == "rgb") {
+      return ctx.text("RGB: " + keyword.rgb(colorname).toString());
+    }
+  } catch (error) {
+    let errorMessage = "Something went wrong";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    console.log(errorMessage);
+    return ctx.text("Specify correct colorname and colorformat!");
+  }
+});
+
+export default app;
